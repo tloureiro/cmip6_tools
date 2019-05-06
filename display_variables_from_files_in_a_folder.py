@@ -26,7 +26,7 @@ for file in files:
         if variable in variables_dict:
             variables_dict[variable] += 1
         else:
-            variables_dict[variable] = 0
+            variables_dict[variable] = 1
 
 
 print()
