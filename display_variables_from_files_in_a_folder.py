@@ -8,7 +8,7 @@ variables_dict = {}
 parser = ArgumentParser(description='Display variables contained in all files inside a directory')
 
 parser.add_argument("-d", "--directory", dest="directory",
-                    help="directory containing nc files", metavar="")
+                    help="directory containing nc files", metavar="", required=True)
 
 directory = vars(parser.parse_args())['directory']
 
