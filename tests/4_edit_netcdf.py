@@ -5,36 +5,33 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-rootgrp = Dataset("crop.nc", "r", format="NETCDF4")
+file_input = Dataset("siarean_SImon_CESM2_1pctCO2_r1i1p1f1_gn_000101-005012.nc")
 
-# del(rootgrp.variables['time_bnds'])
-
-print(list(rootgrp.variables.keys()))
-
-rootgrp.close()
+file_output = Dataset("output.nc", "w")
 
 
-# input file
-dsin = Dataset("siarean_SImon_CESM2_1pctCO2_r1i1p1f1_gn_000101-005012.nc")
+for dimension_name, size in file_input.dimensions.items():
+    file_output.createDimension(dimension_name, len(size) if not size.isunlimited() else None)
 
-# output file
-dsout = Dataset("crop.nc", "w", format="NETCDF4")
+for variable_name, variable in file_input.variables.items():
 
-# Copy dimensions
-for dname, the_dim in dsin.dimensions.items():
-    print
-    dname, len(the_dim)
-    dsout.createDimension(dname, len(the_dim) if not the_dim.isunlimited() else None)
+    if variable_name != 'siarean' and variable_name != 'time':
+        continue
 
-# Copy variables
-for v_name, varin in dsin.variables.items():
-    outVar = dsout.createVariable(v_name, varin.datatype, varin.dimensions)
-    print
-    varin.datatype
+    print(variable.datatype)
+    variable_output = file_output.createVariable(variable_name, variable.datatype, variable.dimensions)
 
-    # Copy variable attributes
-    outVar.setncatts({k: varin.getncattr(k) for k in varin.ncattrs()})
+    attributes = {}
+    for attribute_name in variable.ncattrs():
+        attributes[attribute_name] = variable.getncattr(attribute_name)
+    variable_output.setncatts(attributes)
 
-    outVar[:] = varin[:]
-# close the output file
-dsout.close()
+    i = 0
+    for value in variable:
+        variable_output[i] = value + 2
+        i += 1
+
+    # variable_output[:] = variable[:]
+
+
+file_output.close()
