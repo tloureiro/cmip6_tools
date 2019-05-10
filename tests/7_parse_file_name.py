@@ -8,7 +8,3 @@ for filename in files:
     starting_year = start_date_portion[:4]
     starting_month = start_date_portion[4:]
     print(starting_year + '_' + starting_month)
-
-
-
-    '/home/tloureiro/projects/cmip6_tools/transformed/siarean_SImon_CESM2-WACCM_historical_r3i1p1f1_gn_185001-201412.nc'
